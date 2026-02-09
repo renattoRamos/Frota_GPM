@@ -73,9 +73,8 @@ export function usePushNotifications() {
                 });
 
             if (error) {
-                console.error('Supabase error:', error);
-                // If database fails, we should probably unsubscribe locally or retry
-                // But for now just log it
+                console.error('Push notification subscription error (Supabase):', error);
+                throw error; // Rethrow to trigger catch block
             }
 
             setIsSubscribed(true);

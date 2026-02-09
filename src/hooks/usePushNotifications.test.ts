@@ -12,13 +12,16 @@ const mockPostgrestBuilder = {
 
 vi.mock('@/integrations/supabase/client', () => ({
     supabase: {
-        from: vi.fn(() => mockPostgrestBuilder),
+        from: vi.fn().mockReturnValue({
+            upsert: vi.fn().mockReturnValue({ error: null }),
+            delete: vi.fn().mockReturnThis(),
+            eq: vi.fn().mockResolvedValue({ error: null }),
+        }),
     },
 }));
 
 describe('usePushNotifications', () => {
     const originalNotification = global.Notification;
-    const originalNavigator = global.navigator;
 
     beforeEach(() => {
         // Reset mocks
@@ -26,14 +29,13 @@ describe('usePushNotifications', () => {
 
         // Mock VAPID key
         vi.stubEnv('VITE_VAPID_PUBLIC_KEY', 'test-vapid-key');
-        // For import.meta.env, we might need a different approach if relying on it.
-        // However, let's fix the chaining first.
 
         // Mock Notification API
-        global.Notification = {
-            requestPermission: vi.fn(),
-            permission: 'default',
-        } as any;
+        const mockNotification = vi.fn();
+        (mockNotification as any).requestPermission = vi.fn();
+        (mockNotification as any).permission = 'default';
+
+        global.Notification = mockNotification as any;
 
         // Mock Service Worker
         Object.defineProperty(global.navigator, 'serviceWorker', {
@@ -49,13 +51,13 @@ describe('usePushNotifications', () => {
                     },
                 }),
             },
+            configurable: true,
             writable: true,
         });
     });
 
     afterEach(() => {
         global.Notification = originalNotification;
-        global.navigator = originalNavigator;
     });
 
     it('should initialize with default permission', () => {

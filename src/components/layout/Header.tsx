@@ -2,6 +2,8 @@ import { Car, Grid, LayoutList, MonitorPlay, RefreshCw, Clock } from "lucide-rea
 import { cn } from "@/lib/utils";
 import { format, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { PushNotificationToggle } from "../pwa/PushNotificationToggle";
+
 
 interface HeaderProps {
     viewMode: "table" | "card" | "carousel";
@@ -72,6 +74,9 @@ export const Header = ({ viewMode, setViewMode, isSynced = true, lastUpdated }: 
                     )}
                 </div>
 
+                <div className="w-px h-6 bg-white/10 mx-1 md:mx-2" />
+
+                <PushNotificationToggle />
             </div>
         </header>
     );

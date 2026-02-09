@@ -75,11 +75,16 @@ export default {
           from: { transform: "rotate(-90deg)" },
           to: { transform: "rotate(0deg)" },
         },
+        "gentle-pulse": {
+          "0%, 100%": { opacity: "1", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.05)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gauge-spin": "gauge-spin 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "gentle-pulse": "gentle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
